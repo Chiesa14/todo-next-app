@@ -1,6 +1,8 @@
 "use client";
 import Todo from "@/components/Todo";
 import { useState } from "react";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -17,13 +19,22 @@ export default function Home() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     try {
-      
+      toast.success("Task Added Successfully");
     } catch (error) {
       console.log(error);
-  }
-
+    }
+  };
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        rtl={false}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+        hideProgressBar={true}
+        transition={Slide}
+      />
       <form className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
         <input
           value={formData.title}
@@ -43,6 +54,7 @@ export default function Home() {
         <button
           type="submit"
           className=" bg-green-600 py-3 px-11 text-white rounded-md"
+          onClick={onSubmitHandler}
         >
           Add Todo
         </button>
