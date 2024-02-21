@@ -1,6 +1,14 @@
 import React from "react";
 
-const Todo = ({ id, title, description, isComplete, mongoId, deleteTodo }) => {
+const Todo = ({
+  id,
+  title,
+  description,
+  completed,
+  mongoId,
+  deleteTodo,
+  markAsDone,
+}) => {
   return (
     <tr className="bg-white border-b">
       <th
@@ -11,7 +19,7 @@ const Todo = ({ id, title, description, isComplete, mongoId, deleteTodo }) => {
       </th>
       <td className="px-6 py-4">{title}</td>
       <td className="px-6 py-4"> {description}</td>
-      <td className="px-6 py-4">{isComplete ? "Completed" : "Pending"}</td>
+      <td className="px-6 py-4">{completed ? "Completed" : "Pending"}</td>
       <td className="px-6 py-4 flex gap-2">
         <button
           className="py-2 px-4 bg-red-500 rounded text-white"
@@ -19,7 +27,11 @@ const Todo = ({ id, title, description, isComplete, mongoId, deleteTodo }) => {
         >
           Delete
         </button>
-        <button className="py-2 px-4 bg-green-500 rounded text-white">
+        <button
+          className="py-2 px-4 bg-green-500 rounded text-white"
+          onClick={() => markAsDone(mongoId)}
+          disabled={false}
+        >
           Done
         </button>
       </td>

@@ -26,7 +26,6 @@ export default function Home() {
     const name = e.target.name;
     const value = e.target.value;
     setFormData((form) => ({ ...form, [name]: value }));
-    console.log(formData);
   };
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -51,6 +50,13 @@ export default function Home() {
     fetchTodos();
   };
 
+  const markAsDone = async (id) => {
+    const response = await axios.put("/backend", {
+      params: { mongoID: id },
+    });
+    toast.success(response.data.msg);
+    fetchTodos();
+  };
   return (
     <>
       <ToastContainer
@@ -62,8 +68,8 @@ export default function Home() {
         pauseOnFocusLoss={false}
         hideProgressBar={true}
         transition={Slide}
-        theme="colored"
-        className="opacity-80"
+        theme="dark"
+        className="opacity-50"
       />
       <form className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
         <input
@@ -122,6 +128,7 @@ export default function Home() {
                   completed={item.isComplete}
                   mongoId={item._id}
                   deleteTodo={deleteTodo}
+                  markAsDone={markAsDone}
                 />
               );
             })}

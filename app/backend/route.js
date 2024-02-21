@@ -8,7 +8,7 @@ const LoadDB = async () => {
 LoadDB();
 
 export async function GET(request) {
-  const todos = await TodoModel.find().sort({ updatedAt: -1 });
+  const todos = await TodoModel.find().sort({ createdAt: -1 });
   return NextResponse.json({ todos: todos });
 }
 
@@ -24,4 +24,14 @@ export async function DELETE(request) {
   const id = await request.nextUrl.searchParams.get("mongoID");
   await TodoModel.findByIdAndDelete(id);
   return NextResponse.json({ msg: "Deleted Successfully" });
+}
+
+export async function PUT(request) {
+  const id = await request.nextUrl.searchParams.get("mongoID");
+  await TodoModel.findByIdAndUpdate(id, {
+    $set: {
+      isComplete: true,
+    },
+  });
+  return NextResponse.json({ msg: "Updated Successfully" });
 }
