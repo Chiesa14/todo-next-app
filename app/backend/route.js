@@ -1,4 +1,4 @@
-import { ConnectDB } from "@/lib/comfig/db";
+import { ConnectDB } from "@/lib/config/db";
 import { NextResponse } from "next/server";
 
 const LoadDB = async () => {
@@ -6,6 +6,6 @@ const LoadDB = async () => {
 };
 LoadDB();
 
-export default function GET(request) {
+export async function GET(request) {
   return NextResponse.json({ msg: "Response from server" });
 }
