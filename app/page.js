@@ -42,6 +42,15 @@ export default function Home() {
       toast.error("Faild to add task");
     }
   };
+
+  const deleteTodo = async (id) => {
+    const response = await axios.delete("/backend", {
+      params: { mongoID: id },
+    });
+    toast.success(response.data.msg);
+    fetchTodos();
+  };
+
   return (
     <>
       <ToastContainer
@@ -53,6 +62,7 @@ export default function Home() {
         pauseOnFocusLoss={false}
         hideProgressBar={true}
         transition={Slide}
+        theme="colored"
         className="opacity-80"
       />
       <form className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
@@ -106,11 +116,12 @@ export default function Home() {
               return (
                 <Todo
                   key={index}
-                  id={item.id}
+                  id={index + 1}
                   title={item.title}
                   description={item.description}
                   completed={item.isComplete}
                   mongoId={item._id}
+                  deleteTodo={deleteTodo}
                 />
               );
             })}
