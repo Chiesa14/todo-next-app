@@ -1,6 +1,7 @@
 "use client";
 import Todo from "@/components/Todo";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -10,23 +11,41 @@ export default function Home() {
     description: "",
   });
 
+  const [todos, setTodos] = useState([]);
+
+  const fetchTodos = async () => {
+    const response = await axios.get("/backend");
+    setTodos(response.data.todos);
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   const onChangeHandler = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setFormData((form) => ({ ...form, [name]: value }));
     console.log(formData);
   };
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      toast.success("Task Added Successfully");
+      const response = await axios.post("/backend", formData);
+      toast.success(response.data.msg);
+      setFormData({
+        title: "",
+        description: "",
+      });
+      fetchTodos();
     } catch (error) {
-      console.log(error);
+      toast.error("Faild to add task");
     }
   };
   return (
     <>
       <ToastContainer
+        limit={1}
         position="bottom-right"
         autoClose={2000}
         rtl={false}
@@ -34,6 +53,7 @@ export default function Home() {
         pauseOnFocusLoss={false}
         hideProgressBar={true}
         transition={Slide}
+        className="opacity-80"
       />
       <form className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
         <input
@@ -82,7 +102,18 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            <Todo />
+            {todos.map((item, index) => {
+              return (
+                <Todo
+                  key={index}
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  completed={item.isComplete}
+                  mongoId={item._id}
+                />
+              );
+            })}
           </tbody>
         </table>
       </div>
